@@ -33,13 +33,13 @@ jobs:
         run: ls -l $GITHUB_WORKSPACE/build/libs/
 
       - name: Copy jar file via SSH using scp command
-        uses: appleboy/ssh-action@master
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST_BLUE }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY_BLUE }}
-          script: |
-            scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $GITHUB_WORKSPACE/build/libs/munecting-deploy-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST_BLUE }}:/home/ubuntu/munecting.jar
+          source: "build/libs/munecting-deploy-0.0.1-SNAPSHOT.jar"
+          target: /home/ubuntu/munecting.jar
           debug: true
 
       - name: Execute remote command via SSH to start app
