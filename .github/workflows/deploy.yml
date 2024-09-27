@@ -35,8 +35,9 @@ jobs:
           host: ${{ secrets.EC2_HOST_BLUE }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY_BLUE }}
+          working-directory: build/libs  # 작업 디렉토리를 설정
           script: |
-            scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa build/libs/munecting-deploy-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST_BLUE }}:/home/ubuntu/munecting.jar
+            scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa munecting-deploy-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST_BLUE }}:/home/ubuntu/munecting.jar
 
       - name: Execute remote command via SSH to start app
         uses: appleboy/ssh-action@master
