@@ -35,7 +35,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY_BLUE }}
-          source: "munecting-deploy-0.0.1-SNAPSHOT.jar"  # 빌드된 Spring Boot jar 파일 경로
+          source: "build/libs/munecting-deploy-0.0.1-SNAPSHOT.jar"  # 빌드된 Spring Boot jar 파일 경로
           target: "/home/ubuntu/munecting.jar"  # EC2 인스턴스의 위치
 
       - name: Execute remote command via SSH to start app
