@@ -40,6 +40,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_BLUE }}
           script: |
             scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $GITHUB_WORKSPACE/build/libs/munecting-deploy-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST_BLUE }}:/home/ubuntu/munecting.jar
+          debug: true
 
       - name: Execute remote command via SSH to start app
         uses: appleboy/ssh-action@master
