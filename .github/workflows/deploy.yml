@@ -29,14 +29,14 @@ jobs:
       - name: List build directory
         run: ls -l build/libs
 
-      - name: Copy jar file via SSH
+      - name: Copy jar file via SSH using scp command
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_BLUE }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY_BLUE }}
-          source: "build/libs/munecting-deploy-0.0.1-SNAPSHOT.jar"  # 빌드된 Spring Boot jar 파일 경로
-          target: "/home/ubuntu/munecting.jar"  # EC2 인스턴스의 위치
+          script: |
+            scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa build/libs/munecting-deploy-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST_BLUE }}:/home/ubuntu/munecting.jar
 
       - name: Execute remote command via SSH to start app
         uses: appleboy/ssh-action@master
