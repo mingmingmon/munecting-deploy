@@ -1,12 +1,10 @@
-name: Deploy to EC2
+name: Deploy Spring Boot to EC2
 
 on:
   push:
     branches:
       - develop
-  pull_request:
-    branches:
-      - develop
+
 
 jobs:
   deploy:
@@ -23,23 +21,23 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test # 테스트 제외하고 빌드. 필요시 '-x test' 제거 가능
 
-      - name: Copy file via SSH
+      - name: Copy jar file via SSH
         uses: appleboy/scp-action@v0.1.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build/libs/munecting.jar"
-          target: "/home/ubuntu/your-app.jar"
+          source: "build/libs/munecting.jar"  # 빌드된 Spring Boot jar 파일 경로
+          target: "/home/ubuntu/munecting.jar"  # EC2 인스턴스의 위치
 
-      - name: Execute remote command via SSH
+      - name: Execute remote command via SSH to start app
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            pkill -f 'java -jar' || true
-            nohup java -jar /home/ubuntu/your-app.jar > /dev/null 2>&1 &
+            pkill -f 'java -jar' || true  # 기존 Spring Boot 앱이 있다면 종료
+            nohup java -jar /home/ubuntu/munecting.jar > /dev/null 2>&1 &
