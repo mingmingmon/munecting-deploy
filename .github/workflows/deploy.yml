@@ -20,6 +20,9 @@ jobs:
           java-version: '21'  # Java 21 사용
           distribution: 'temurin'
 
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x gradlew  # gradlew 파일에 실행 권한 추가
+
       - name: Build with Gradle
         run: ./gradlew clean build -x test # 테스트 제외하고 빌드. 필요시 '-x test' 제거 가능
 
